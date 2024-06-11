@@ -11,11 +11,11 @@ import { useRouter } from 'next/router';
 const Register = () => {
   const dispatch = useDispatch();
   const router = useRouter();
-  const { isAuthenticated, error, loading } = useSelector((state: AppState) => state.auth);
+  const { isAuthenticated, registerError, loading } = useSelector((state: AppState) => state.auth);
 
   useEffect(() => {
     if (isAuthenticated) {
-      router.push('/home');
+      router.push('/');
     }
   }, [isAuthenticated, router]);
 
@@ -90,7 +90,7 @@ const Register = () => {
             <div className="text-red-500 text-sm">{formik.errors.password}</div>
           ) : null}
         </div>
-        {error && <div className="text-red-500 text-sm mb-4">{error}</div>}
+        {registerError && <div className="text-red-500 text-sm mb-4">{registerError}</div>}
         <br />
         <div className="mb-4">
           <button
