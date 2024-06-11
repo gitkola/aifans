@@ -25,7 +25,7 @@ export const loginFailure = (error: string) => ({
   payload: error,
 });
 
-export const logout = () => ({
+export const logoutRequest = () => ({
   type: LOGOUT,
 });
 
