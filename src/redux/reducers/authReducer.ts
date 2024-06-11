@@ -16,13 +16,15 @@ import {
 interface InitialState {
   isAuthenticated: boolean;
   loading: boolean;
-  error: string | null;
+  loginError: string | null;
+  registerError: string | null;
 }
 
 const initialState: InitialState = {
   isAuthenticated: false,
   loading: false,
-  error: null,
+  loginError: null,
+  registerError: null,
 };
 
 interface HydrateAction extends Action {
@@ -44,7 +46,7 @@ const authReducer = createReducer(initialState, (builder) => {
     })
     .addCase(LOGIN_REQUEST, (state) => {
       state.loading = true;
-      state.error = null;
+      state.loginError = null;
     })
     .addCase(LOGIN_SUCCESS, (state) => {
       state.isAuthenticated = true;
@@ -54,7 +56,7 @@ const authReducer = createReducer(initialState, (builder) => {
       LOGIN_FAILURE,
       (state: InitialState, action: LoginFailureAction) => {
         state.loading = false;
-        state.error = action.payload;
+        state.loginError = action.payload;
       }
     )
     .addCase(LOGOUT, (state) => {
@@ -62,7 +64,7 @@ const authReducer = createReducer(initialState, (builder) => {
     })
     .addCase(REGISTER_REQUEST, (state) => {
       state.loading = true;
-      state.error = null;
+      state.registerError = null;
     })
     .addCase(REGISTER_SUCCESS, (state) => {
       state.loading = false;
@@ -71,7 +73,7 @@ const authReducer = createReducer(initialState, (builder) => {
       REGISTER_FAILURE,
       (state: InitialState, action: RegisterFailureAction) => {
         state.loading = false;
-        state.error = action.payload;
+        state.registerError = action.payload;
       }
     );
 });
