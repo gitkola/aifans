@@ -11,7 +11,7 @@ import { useRouter } from 'next/router';
 const Login = () => {
   const dispatch = useDispatch();
   const router = useRouter();
-  const { isAuthenticated, error, loading } = useSelector((state: AppState) => state.auth);
+  const { isAuthenticated, loginError, loading } = useSelector((state: AppState) => state.auth);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -71,7 +71,7 @@ const Login = () => {
             <div className="text-red-500 text-sm">{formik.errors.password}</div>
           ) : null}
         </div>
-        {error && <div className="text-red-500 text-sm mb-4">{error}</div>}
+        {loginError && <div className="text-red-500 text-sm mb-4">{loginError}</div>}
         <br />
         <div className="mb-4">
           <button
