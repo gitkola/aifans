@@ -9,12 +9,11 @@ import {
   loginFailure,
   registerSuccess,
   registerFailure,
-  logout,
 } from "../actions/authActions";
 import { loginApi, logoutApi, registerApi } from "@/api-client/authApi";
 import { fetchUserSuccess } from "../actions/userActions";
 
-interface LoginAction {
+interface LoginRequestAction {
   type: "LOGIN_REQUEST"; // TODO: fix hardcode
   payload: {
     username: string;
@@ -22,7 +21,7 @@ interface LoginAction {
   };
 }
 
-interface LogoutAction {
+interface LogoutRequestAction {
   type: "LOGOUT"; // TODO: fix hardcode
   payload: {
     username: string;
@@ -30,7 +29,7 @@ interface LogoutAction {
   };
 }
 
-interface RegisterAction {
+interface RegisterRequestAction {
   type: "REGISTER_REQUEST"; // TODO: fix hardcode
   payload: {
     username: string;
@@ -39,7 +38,8 @@ interface RegisterAction {
   };
 }
 
-function* handleLogin(action: LoginAction): any {
+function* handleLogin(action: LoginRequestAction): any {
+  // TODO: type return value
   try {
     const { username, password } = action.payload;
     const data = yield call(loginApi, username, password);
@@ -52,7 +52,8 @@ function* handleLogin(action: LoginAction): any {
   }
 }
 
-function* handleRegister(action: RegisterAction): any {
+function* handleRegister(action: RegisterRequestAction): any {
+  // TODO: type return value
   try {
     const { username, password, email } = action.payload;
     yield call(registerApi, username, password, email);
@@ -69,9 +70,9 @@ function* handleRegister(action: RegisterAction): any {
 }
 
 function* handleLogout(): any {
+  // TODO: type return value
   try {
     yield call(logoutApi);
-    yield put(logout());
   } catch (error: any) {
     // TODO: Type error.
     const message = error?.response?.data?.message || "Something went wrong";
