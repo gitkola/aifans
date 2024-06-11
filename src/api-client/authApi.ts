@@ -14,7 +14,6 @@ export const registerApi = async (
     password,
     email,
   });
-  console.log("api", response.data);
   return response.data;
 };
 
@@ -23,7 +22,7 @@ export const loginApi = async (username: string, password: string) => {
   return response.data;
 };
 
-// export const logout = async () => {
-//   const response = await axios.post(API_URL + "logout");
-//   return response.data;
-// };
+export const logoutApi = async () => {
+  const response = await axios.post(API_URL + "logout");
+  return response.data;
+};
