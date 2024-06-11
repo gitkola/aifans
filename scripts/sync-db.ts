@@ -28,6 +28,7 @@ const syncDatabase = async () => {
       password,
     });
     await connection.query(`CREATE DATABASE IF NOT EXISTS \`${dbName}\`;`);
+    connection.end();
     console.log("Database created");
     await sequelize.authenticate();
     console.log("Connection has been established successfully.");
