@@ -15,7 +15,7 @@ const Login = () => {
 
   useEffect(() => {
     if (isAuthenticated) {
-      router.push('/');
+      router.push('/profile');
     }
   }, [isAuthenticated, router]);
 
