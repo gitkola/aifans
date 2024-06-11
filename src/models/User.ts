@@ -33,9 +33,10 @@ User.init(
       type: new DataTypes.STRING(128),
       allowNull: true,
       unique: true,
-      validate: {
-        isEmail: true,
-      },
+      // TODO: Uncomment the following line to enable email validation when email authentication is implemented
+      // validate: {
+      //   isEmail: true,
+      // },
     },
     role: {
       type: DataTypes.ENUM("user", "admin"),
