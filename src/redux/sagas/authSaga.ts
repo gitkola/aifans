@@ -4,15 +4,26 @@ import { call, put, takeLatest } from "redux-saga/effects";
 import {
   LOGIN_REQUEST,
   REGISTER_REQUEST,
+  LOGOUT,
   loginSuccess,
   loginFailure,
   registerSuccess,
   registerFailure,
+  logout,
 } from "../actions/authActions";
-import { loginApi, registerApi } from "@/api-client/authApi";
+import { loginApi, logoutApi, registerApi } from "@/api-client/authApi";
+import { fetchUserSuccess } from "../actions/userActions";
 
 interface LoginAction {
-  type: "LOGIN_REQUEST";
+  type: "LOGIN_REQUEST"; // TODO: fix hardcode
+  payload: {
+    username: string;
+    password: string;
+  };
+}
+
+interface LogoutAction {
+  type: "LOGOUT"; // TODO: fix hardcode
   payload: {
     username: string;
     password: string;
@@ -20,7 +31,7 @@ interface LoginAction {
 }
 
 interface RegisterAction {
-  type: "REGISTER_REQUEST";
+  type: "REGISTER_REQUEST"; // TODO: fix hardcode
   payload: {
     username: string;
     password: string;
@@ -31,10 +42,13 @@ interface RegisterAction {
 function* handleLogin(action: LoginAction): any {
   try {
     const { username, password } = action.payload;
-    yield call(loginApi, username, password);
+    const data = yield call(loginApi, username, password);
     yield put(loginSuccess());
-  } catch (error) {
-    yield put(loginFailure((error as Error).message));
+    yield put(fetchUserSuccess(data.user));
+  } catch (error: any) {
+    // TODO: Type error.
+    const message = error?.response?.data?.message || "Something went wrong";
+    yield put(loginFailure(message));
   }
 }
 
@@ -43,12 +57,30 @@ function* handleRegister(action: RegisterAction): any {
     const { username, password, email } = action.payload;
     yield call(registerApi, username, password, email);
     yield put(registerSuccess());
-  } catch (error) {
-    yield put(registerFailure((error as Error).message));
+    yield handleLogin({
+      type: LOGIN_REQUEST,
+      payload: { username, password },
+    });
+  } catch (error: any) {
+    // TODO: Type error.
+    const message = error?.response?.data?.message || "Something went wrong";
+    yield put(registerFailure(message));
+  }
+}
+
+function* handleLogout(): any {
+  try {
+    yield call(logoutApi);
+    yield put(logout());
+  } catch (error: any) {
+    // TODO: Type error.
+    const message = error?.response?.data?.message || "Something went wrong";
+    yield put(loginFailure(message));
   }
 }
 
 export default function* authSaga() {
   yield takeLatest(LOGIN_REQUEST, handleLogin);
+  yield takeLatest(LOGOUT, handleLogout);
   yield takeLatest(REGISTER_REQUEST, handleRegister);
 }
