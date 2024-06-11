@@ -20,7 +20,7 @@ export default async function login(req: NextApiRequest, res: NextApiResponse) {
 
     const isValidPassword = await bcrypt.compare(
       password,
-      user?.Auth?.password
+      user?.Auth?.password || ""
     );
     if (isValidPassword) {
       // TODO: handle create session data
