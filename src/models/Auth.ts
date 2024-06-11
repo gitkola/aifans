@@ -1,5 +1,5 @@
 import { Model, DataTypes } from "sequelize";
-import sequelize from "../database";
+import sequelize from "../utils/database";
 
 class Auth extends Model {
   declare id?: string;

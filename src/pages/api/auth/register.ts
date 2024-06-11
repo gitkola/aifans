@@ -2,7 +2,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import bcrypt from "bcrypt";
 import { User, Auth } from "@/models";
-import sequelize from "@/database";
+import sequelize from "@/utils/database";
 
 export default async function register(
   req: NextApiRequest,

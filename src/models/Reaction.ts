@@ -1,5 +1,5 @@
 import { Model, DataTypes, Identifier } from "sequelize";
-import sequelize from "../database";
+import sequelize from "../utils/database";
 import User from "./User";
 import Message from "./Message";
 import type { ReactionType } from "../types";

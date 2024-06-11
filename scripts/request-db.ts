@@ -1,5 +1,5 @@
 import { log } from "console";
-import sequelize from "../src/database";
+import sequelize from "../src/utils/database";
 import { User, Game, Message, Content, Reaction } from "../src/models";
 
 const requestDatabase = async () => {
