@@ -10,7 +10,7 @@ const NavBar = () => {
   return (
     <nav className="flex justify-between items-center p-4 bg-gray-200 dark:bg-gray-800">
       <Link href="/" className={`text-xl font-semibold ${className}`}>AIFans</Link>
-      {isAuthenticated && <Link href="/home" className={className}>Home</Link>}
+      {isAuthenticated && <Link href="/" className={className}>Home</Link>}
       {isAuthenticated && <Link href="/profile" className={className}>Profile</Link>}
       {isAuthenticated && <Link href="/about" className={className}>About</Link>}
       {!isAuthenticated && <Link href="/login" className={className}>Login</Link>}
