@@ -9,11 +9,9 @@ const password = process.env.DB_PASSWORD!;
 const host = process.env.DB_HOST!;
 const port = parseInt(process.env.DB_PORT!);
 
-const sequelize = new Sequelize(database, username, password, {
+export const sequelize = new Sequelize(database, username, password, {
   host,
   port,
   dialect: "mysql",
   // logging: (msg) => console.log(`[Sequelize] ${msg}`),
 });
-
-export default sequelize;
