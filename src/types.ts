@@ -26,6 +26,7 @@ interface SnakeGameState extends BaseGameState {
 export type GameState = TetrisGameState | SnakeGameState;
 
 export type ContentType =
+  | "title"
   | "text"
   | "image"
   | "video"
@@ -37,4 +38,10 @@ export type ContentType =
   | "pdf"
   | "link";
 
-export type ReactionType = "like" | "love" | "dislike";
+export type ReactionType =
+  | "like"
+  | "dislike"
+  | "love"
+  | "laugh"
+  | "sad"
+  | "angry";
