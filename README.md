@@ -27,12 +27,20 @@ DB_HOST=localhost
 DB_PORT=3306
 ```
 
-3. Run script to create database and its tables:
+3. Run script to create database:
 
 ```bash
-npm run db:sync
+npm run db:create
 # or
-yarn db:sync
+yarn db:create
+```
+
+4. Run migrations:
+
+```bash
+npm run migrate:up
+# or
+yarn migrate:up
 ```
 
 ### Run project:
