@@ -1,6 +1,6 @@
 // src/redux/actions/userActions.ts
 
-import { User } from "@/models";
+import { User } from "@/db/models";
 
 export const FETCH_USER_REQUEST = "FETCH_USER_REQUEST";
 export const FETCH_USER_SUCCESS = "FETCH_USER_SUCCESS";

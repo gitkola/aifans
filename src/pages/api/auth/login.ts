@@ -1,26 +1,32 @@
 // src/pages/api/auth/login.ts
 import type { NextApiRequest, NextApiResponse } from "next";
 import bcrypt from "bcrypt";
-import { User, Auth, UserWithAuth } from "@/models";
+import { User } from "@/db/models";
+import { Op } from "sequelize";
 
 export default async function login(req: NextApiRequest, res: NextApiResponse) {
   try {
     if (req.method !== "POST") {
       return res.status(405).json({ message: "Method Not Allowed" });
     }
-    if (!req.body || !req.body.username || !req.body.password) {
+    if (!req.body || !req.body.usernameOrEmail || !req.body.password) {
       return res.status(400).json({ message: "Invalid request" });
     }
-    const { username, password } = req.body;
+    const { usernameOrEmail, password } = req.body;
 
-    const user = (await User.findOne({
-      where: { username },
-      include: [Auth], // TODO: add Auth fields to User model
-    })) as UserWithAuth;
+    const user = await User.findOne({
+      where: {
+        [Op.or]: [{ username: usernameOrEmail }, { email: usernameOrEmail }],
+      },
+    });
+
+    if (!user) {
+      return res.status(400).json({ message: "Invalid username or password" });
+    }
 
     const isValidPassword = await bcrypt.compare(
       password,
-      user?.Auth?.password || ""
+      user?.password || ""
     );
     if (isValidPassword) {
       // TODO: handle create session data

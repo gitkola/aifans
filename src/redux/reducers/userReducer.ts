@@ -10,7 +10,7 @@ import {
   UPDATE_USER_SUCCESS,
   UPDATE_USER_FAILURE,
 } from "../actions/userActions";
-import { User } from "@/models";
+import { User } from "@/db/models";
 
 interface InitialState {
   user: User | null;

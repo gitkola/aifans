@@ -4,11 +4,16 @@ import axios from "axios";
 
 const API_URL = "/api/auth/";
 
-export const registerApi = async (
-  username: string,
-  password: string,
-  email?: string
-) => {
+export const registerApi = async ({
+  password,
+  email,
+  username,
+}: {
+  password: string;
+  email?: string;
+  username?: string;
+}) => {
+  if (!email && !username) throw new Error("Email or username required");
   const response = await axios.post(API_URL + "register", {
     username,
     password,
@@ -17,8 +22,18 @@ export const registerApi = async (
   return response.data;
 };
 
-export const loginApi = async (username: string, password: string) => {
-  const response = await axios.post(API_URL + "login", { username, password });
+export const loginApi = async ({
+  usernameOrEmail,
+  password,
+}: {
+  usernameOrEmail: string;
+  password: string;
+}) => {
+  if (!usernameOrEmail) throw new Error("Email or username required");
+  const response = await axios.post(API_URL + "login", {
+    usernameOrEmail,
+    password,
+  });
   return response.data;
 };
 

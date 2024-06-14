@@ -18,10 +18,8 @@ const Profile = () => {
     }
   }, [isAuthenticated, router]);
 
-
-
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen py-2">
+    <div className="flex flex-col items-center justify-center min-h-screen p-8">
       <h1 className="text-3xl font-bold mb-4">Profile</h1>
       <div className="mb-4">
         <p className="text-lg">Username: {user?.username}</p>
@@ -29,14 +27,16 @@ const Profile = () => {
         <p className="text-lg">Role: {user?.role}</p>
         <p className="text-lg">id: {user?.id}</p>
         <br />
-        <button
-          disabled={loading}
-          onClick={() => { dispatch(logoutRequest()) }}
-          type="submit"
-          className="w-full bg-red-500 text-white py-2 px-4 rounded-md shadow-sm hover:bg-red-600 focus:ring focus:ring-red-300"
-        >
-          Logout
-        </button>
+        <div className="mb-4">
+          <button
+            disabled={loading}
+            onClick={() => { dispatch(logoutRequest()) }}
+            type="submit"
+            className="w-full bg-red-500 text-white py-2 px-4 rounded-md shadow-sm hover:bg-red-600 focus:ring focus:ring-red-300"
+          >
+            Logout
+          </button>
+        </div>
       </div>
     </div>
   );

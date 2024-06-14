@@ -21,37 +21,39 @@ const Login = () => {
 
   const formik = useFormik({
     initialValues: {
-      username: '',
+      usernameOrEmail: '',
       password: '',
     },
     validationSchema: Yup.object({
-      username: Yup.string().required('Username is required'),
-      password: Yup.string().required('Password is required'),
+      usernameOrEmail: Yup.string().required('Username or email required'),
+      password: Yup.string().required('Password required'),
     }),
     onSubmit: (values) => {
       dispatch(loginRequest(values));
     },
   });
 
+  const disabled = Object.keys(formik.touched).length < 1 || !formik.isValid || loading;
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-2">
       <h1 className="text-3xl font-bold mb-4">Login</h1>
       <form onSubmit={formik.handleSubmit} className="w-full max-w-md p-8">
         <div className="mb-4">
-          <label htmlFor="username" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-            Username
+          <label htmlFor="usernameOrEmail" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            Username or email
           </label>
           <input
-            id="username"
-            name="username"
+            id="usernameOrEmail"
+            name="usernameOrEmail"
             type="text"
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            value={formik.values.username}
+            value={formik.values.usernameOrEmail}
             className="mt-1 block w-full p-2 text-gray-700 border border-gray-300 dark:border-gray-700 rounded-md shadow-sm focus:ring focus:ring-opacity-50"
           />
-          {formik.touched.username && formik.errors.username ? (
-            <div className="text-red-500 text-sm">{formik.errors.username}</div>
+          {formik.touched.usernameOrEmail && formik.errors.usernameOrEmail ? (
+            <div className="text-red-500 text-sm">{formik.errors.usernameOrEmail}</div>
           ) : null}
         </div>
         <div className="mb-4">
@@ -75,9 +77,9 @@ const Login = () => {
         <br />
         <div className="mb-4">
           <button
-            disabled={loading}
+            disabled={disabled}
             type="submit"
-            className="w-full bg-blue-500 text-white py-2 px-4 rounded-md shadow-sm hover:bg-blue-600 focus:ring focus:ring-blue-300"
+            className="w-full bg-blue-500 text-white py-2 px-4 rounded-md shadow-sm hover:bg-blue-600 focus:ring focus:ring-blue-300 disabled:opacity-50"
           >
             Login
           </button>

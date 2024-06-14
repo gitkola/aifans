@@ -12,7 +12,7 @@ import {
   UPDATE_USER_REQUEST,
 } from "../actions/userActions";
 import { fetchUserProfile, updateUserProfile } from "../../api-client/userApi";
-import { User } from "@/models";
+import { User } from "@/db/models";
 
 function* handleFetchUser() {
   try {

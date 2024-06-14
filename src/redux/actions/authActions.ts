@@ -9,7 +9,7 @@ export const REGISTER_SUCCESS = "REGISTER_SUCCESS";
 export const REGISTER_FAILURE = "REGISTER_FAILURE";
 
 export const loginRequest = (credentials: {
-  username: string;
+  usernameOrEmail: string;
   password: string;
 }) => ({
   type: LOGIN_REQUEST,
@@ -30,9 +30,9 @@ export const logoutRequest = () => ({
 });
 
 export const registerRequest = (userData: {
-  username: string;
-  email?: string;
   password: string;
+  username?: string;
+  email?: string;
 }) => ({
   type: REGISTER_REQUEST,
   payload: userData,

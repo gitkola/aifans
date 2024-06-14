@@ -26,7 +26,7 @@ const Register = () => {
       password: '',
     },
     validationSchema: Yup.object({
-      username: Yup.string().required('Username is required').min(3, 'Username must be at least 3 characters'),
+      username: Yup.string().min(2, 'Username must be at least 2 characters'),
       email: Yup.string().email('Invalid email address'),
       password: Yup.string().required('Password is required').min(6, 'Password must be at least 6 characters'),
     }),
@@ -35,10 +35,14 @@ const Register = () => {
     },
   });
 
+  const usernameOrEmailError = Object.keys(formik.touched).length > 0 && !formik.values.username && !formik.values.email && 'Email or username required';
+  const disabled = Object.keys(formik.touched).length < 1 || !!usernameOrEmailError || !formik.isValid || loading;
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-2">
       <h1 className="text-3xl font-bold mb-4">Register</h1>
-      <form onSubmit={formik.handleSubmit} className="w-full max-w-md p-8">
+      <form onSubmit={formik.handleSubmit} className="w-full max-w-md px-8">
+        <p className="text-gray-700 dark:text-gray-300 mb-4">Create an account with username or email to get started. You can update your profile later.</p>
         <div className="mb-4">
           <label htmlFor="username" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
             Username
@@ -52,9 +56,11 @@ const Register = () => {
             value={formik.values.username}
             className="mt-1 block w-full p-2 text-gray-700 border border-gray-300 dark:border-gray-700 rounded-md shadow-sm focus:ring focus:ring-opacity-50"
           />
-          {formik.touched.username && formik.errors.username ? (
-            <div className="text-red-500 text-sm">{formik.errors.username}</div>
-          ) : null}
+          <div className="h-4 mt-1">
+            {formik.touched.username && formik.errors.username ? (
+              <div className="text-red-500 text-sm mt-1">{formik.errors.username}</div>
+            ) : null}
+          </div>
         </div>
         <div className="mb-4">
           <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -69,9 +75,11 @@ const Register = () => {
             value={formik.values.email}
             className="mt-1 block w-full p-2 text-gray-700 border border-gray-300 dark:border-gray-700 rounded-md shadow-sm focus:ring focus:ring-opacity-50"
           />
-          {formik.touched.email && formik.errors.email ? (
-            <div className="text-red-500 text-sm">{formik.errors.email}</div>
-          ) : null}
+          <div className="h-4 mt-1">
+            {formik.touched.email && formik.errors.email ? (
+              <div className="text-red-500 text-sm  mt-1">{formik.errors.email}</div>
+            ) : null}
+          </div>
         </div>
         <div className="mb-4">
           <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -86,17 +94,22 @@ const Register = () => {
             value={formik.values.password}
             className="mt-1 block w-full p-2 text-gray-700 border border-gray-300 dark:border-gray-700 rounded-md shadow-sm focus:ring focus:ring-opacity-50"
           />
-          {formik.touched.password && formik.errors.password ? (
-            <div className="text-red-500 text-sm">{formik.errors.password}</div>
-          ) : null}
+          <div className="h-4 mt-1">
+            {formik.touched.password && formik.errors.password ? (
+              <div className="text-red-500 text-sm">{formik.errors.password}</div>
+            ) : null}
+          </div>
         </div>
-        {registerError && <div className="text-red-500 text-sm mb-4">{registerError}</div>}
+        <div className="h-4">
+          {usernameOrEmailError && <div className="text-red-500 text-sm mb-4">{usernameOrEmailError}</div>}
+          {registerError && <div className="text-red-500 text-sm mb-4">{registerError}</div>}
+        </div>
         <br />
         <div className="mb-4">
           <button
-            disabled={loading}
+            disabled={disabled}
             type="submit"
-            className="w-full bg-blue-500 text-white py-2 px-4 rounded-md shadow-sm hover:bg-blue-600 focus:ring focus:ring-blue-300"
+            className="w-full bg-blue-500 text-white py-2 px-4 rounded-md shadow-sm hover:bg-blue-600 focus:ring focus:ring-blue-300 disabled:opacity-50"
           >
             Register
           </button>

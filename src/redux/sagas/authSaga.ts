@@ -16,7 +16,7 @@ import { fetchUserSuccess } from "../actions/userActions";
 interface LoginRequestAction {
   type: "LOGIN_REQUEST"; // TODO: fix hardcode
   payload: {
-    username: string;
+    usernameOrEmail: string;
     password: string;
   };
 }
@@ -24,7 +24,7 @@ interface LoginRequestAction {
 interface LogoutRequestAction {
   type: "LOGOUT"; // TODO: fix hardcode
   payload: {
-    username: string;
+    usernameOrEmail: string;
     password: string;
   };
 }
@@ -32,8 +32,8 @@ interface LogoutRequestAction {
 interface RegisterRequestAction {
   type: "REGISTER_REQUEST"; // TODO: fix hardcode
   payload: {
-    username: string;
     password: string;
+    username?: string;
     email?: string;
   };
 }
@@ -41,8 +41,8 @@ interface RegisterRequestAction {
 function* handleLogin(action: LoginRequestAction): any {
   // TODO: type return value
   try {
-    const { username, password } = action.payload;
-    const data = yield call(loginApi, username, password);
+    const { usernameOrEmail, password } = action.payload;
+    const data = yield call(loginApi, { usernameOrEmail, password });
     yield put(loginSuccess());
     yield put(fetchUserSuccess(data.user));
   } catch (error: any) {
@@ -56,11 +56,11 @@ function* handleRegister(action: RegisterRequestAction): any {
   // TODO: type return value
   try {
     const { username, password, email } = action.payload;
-    yield call(registerApi, username, password, email);
+    yield call(registerApi, { username, password, email });
     yield put(registerSuccess());
     yield handleLogin({
       type: LOGIN_REQUEST,
-      payload: { username, password },
+      payload: { usernameOrEmail: username || email || "", password },
     });
   } catch (error: any) {
     // TODO: Type error.
