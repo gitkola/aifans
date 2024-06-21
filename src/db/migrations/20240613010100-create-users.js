@@ -5,7 +5,7 @@ module.exports = {
     const statement = `CREATE TABLE users (
       id CHAR(36) NOT NULL PRIMARY KEY DEFAULT (UUID()),
       username VARCHAR(128) UNIQUE,
-      email VARCHAR(128) UNIQUE,
+      email VARCHAR(128) NOT NULL UNIQUE,
       password VARCHAR(128) NOT NULL,
       role ENUM('user', 'admin') NOT NULL DEFAULT 'user',
       avatar VARCHAR(255),
