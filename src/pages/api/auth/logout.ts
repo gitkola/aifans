@@ -1,19 +1,23 @@
-// src/pages/api/auth/login.ts
+"use client";
 import type { NextApiRequest, NextApiResponse } from "next";
+import { createRouter } from "next-connect";
+import { deleteCookie } from "cookies-next";
 
-export default async function logout(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+const router = createRouter<NextApiRequest, NextApiResponse>();
+router.post((req, res, next) => {
   try {
-    if (req.method !== "POST") {
-      return res.status(405).json({ message: "Method Not Allowed" });
-    }
-    // TODO: handle cleanup of session data
-    res.status(200).json({
-      message: "Logout successful",
-    });
+    deleteCookie("aifansSessionId", { req, res });
+    res.status(200).json({ message: "Logout success." });
   } catch (error) {
-    res.status(500).json({ message: "Internal Server Error" });
+    console.log(error);
+    res.status(500).json({ message: "Something went wrong." });
   }
-}
+});
+export default router.handler({
+  onError: (err, req, res) => {
+    console.error((err as Error).message);
+    res
+      .status((err as { statusCode: number | undefined }).statusCode || 500)
+      .end((err as Error).message);
+  },
+});

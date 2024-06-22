@@ -1,7 +1,7 @@
-export default function Welcome() {
+export default function Main() {
   return (
     <div className={`flex flex-col items-center justify-between p-24`}>
-      <h1>Welcome to AIFans</h1>
-    </div>
+      <h1>Main</h1>
+    </div >
   );
 }

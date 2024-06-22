@@ -1,22 +1,17 @@
-// src/pages/login.tsx
-
-import { useDispatch, useSelector } from 'react-redux';
-import { AppState } from '../redux/store';
-import { logoutRequest } from '../redux/actions/authActions';
-import { useEffect } from 'react';
-import { useRouter } from 'next/router';
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, AppState } from "@/redux/store";
+import { logoutRequest } from "@/redux/actions/authActions";
+import { useRouter } from "next/router";
 
 const Profile = () => {
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
   const router = useRouter();
-  const { isAuthenticated, loginError, loading } = useSelector((state: AppState) => state.auth);
-  const { user } = useSelector((state: AppState) => state.user);
-
-  useEffect(() => {
-    if (!isAuthenticated) {
-      router.push('/');
-    }
-  }, [isAuthenticated, router]);
+  const { user, loading } = useSelector((state: AppState) => state.user);
+  console.log({ router })
+  if (!user && !loading) {
+    router.push('/auth/login');
+    return null;
+  }
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-8">
@@ -29,8 +24,9 @@ const Profile = () => {
         <br />
         <div className="mb-4">
           <button
-            disabled={loading}
-            onClick={() => { dispatch(logoutRequest()) }}
+            onClick={() => {
+              dispatch(logoutRequest());
+            }}
             type="submit"
             className="w-full bg-red-500 text-white py-2 px-4 rounded-md shadow-sm hover:bg-red-600 focus:ring focus:ring-red-300"
           >

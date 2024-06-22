@@ -1,12 +1,9 @@
-// src/redux/store.ts
-
 import { configureStore } from "@reduxjs/toolkit";
 import createSagaMiddleware from "redux-saga";
-import { createWrapper } from "next-redux-wrapper";
 import rootReducer from "./reducers";
 import rootSaga from "./sagas";
 
-const makeStore = () => {
+export const makeStore = () => {
   const sagaMiddleware = createSagaMiddleware();
   const store = configureStore({
     reducer: rootReducer,
@@ -17,6 +14,6 @@ const makeStore = () => {
   return store;
 };
 
-export const wrapper = createWrapper(makeStore);
 export type AppStore = ReturnType<typeof makeStore>;
-export type AppState = ReturnType<typeof rootReducer>;
+export type AppState = ReturnType<AppStore["getState"]>;
+export type AppDispatch = AppStore["dispatch"];

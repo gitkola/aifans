@@ -1,19 +1,37 @@
-// src/pages/_app.tsx
+import { useRef } from "react";
+import { Provider } from "react-redux";
+import { AppProps } from "next/app";
+import { makeStore, AppStore } from "@/redux/store";
+import "@/styles/globals.css";
+import Header from "@/components/Layout/Header";
+import Footer from "@/components/Layout/Footer";
+import { useEffect } from "react";
+import { fetchUserRequest } from "@/redux/actions/userActions";
+import { Inter } from "next/font/google";
 
-import { Provider } from 'react-redux';
-import { AppProps } from 'next/app';
-import { wrapper } from '../redux/store';
-import '../styles/globals.css';
-import Header from '@/components/Layout/Header';
-import Footer from '@/components/Layout/Footer';
+const inter = Inter({ subsets: ["latin"] });
 
 const App = ({ Component, pageProps }: AppProps) => {
-  const { store } = wrapper.useWrappedStore(pageProps);
+  const storeRef = useRef<AppStore | null>(null);
+  if (!storeRef.current) {
+    storeRef.current = makeStore();
+  }
+  useEffect(() => {
+    const fetchUser = () => {
+      try {
+        storeRef.current?.dispatch(fetchUserRequest());
+      } catch (error) {
+        console.error('Failed to fetch user:', error);
+      }
+    };
+
+    fetchUser();
+  }, []);
   return (
-    <Provider store={store}>
+    <Provider store={storeRef.current}>
       <div className="window flex flex-col">
         <Header />
-        <main className="flex-grow">
+        <main className={`flex-grow ${inter.className}`}>
           <Component {...pageProps} />
         </main>
         <Footer />
@@ -22,4 +40,4 @@ const App = ({ Component, pageProps }: AppProps) => {
   );
 };
 
-export default wrapper.withRedux(App);
+export default App;

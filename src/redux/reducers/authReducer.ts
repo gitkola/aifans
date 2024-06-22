@@ -1,81 +1,91 @@
-// src/redux/reducers/authReducer.ts
-
-import { createReducer } from "@reduxjs/toolkit";
-import { Action } from "redux";
-import { HYDRATE } from "next-redux-wrapper";
+import type { IResetAppAction } from "../actions/actionTypes";
+import type { IAuthAction } from "../actions/authActions";
 import {
   LOGIN_REQUEST,
   LOGIN_SUCCESS,
   LOGIN_FAILURE,
-  LOGOUT,
+  LOGOUT_REQUEST,
+  LOGOUT_SUCCESS,
+  LOGOUT_FAILURE,
   REGISTER_REQUEST,
   REGISTER_SUCCESS,
   REGISTER_FAILURE,
 } from "../actions/authActions";
+import { RESET_APP } from "../actions/actionTypes";
+import { Reducer } from "redux";
 
-interface InitialState {
-  isAuthenticated: boolean;
+export interface IAuthState {
   loading: boolean;
   loginError: string | null;
   registerError: string | null;
+  logoutError: string | null;
 }
 
-const initialState: InitialState = {
-  isAuthenticated: false,
+const initialState: IAuthState = {
   loading: false,
   loginError: null,
   registerError: null,
+  logoutError: null,
 };
 
-interface HydrateAction extends Action {
-  payload?: InitialState;
-}
-
-interface LoginFailureAction extends Action<"LOGIN_FAILURE"> {
-  payload: string;
-}
-
-interface RegisterFailureAction extends Action<"REGISTER_FAILURE"> {
-  payload: string;
-}
-
-const authReducer = createReducer(initialState, (builder) => {
-  builder
-    .addCase(HYDRATE, (state: InitialState, action: HydrateAction) => {
-      return { ...state, ...action.payload };
-    })
-    .addCase(LOGIN_REQUEST, (state) => {
-      state.loading = true;
-      state.loginError = null;
-    })
-    .addCase(LOGIN_SUCCESS, (state) => {
-      state.isAuthenticated = true;
-      state.loading = false;
-    })
-    .addCase(
-      LOGIN_FAILURE,
-      (state: InitialState, action: LoginFailureAction) => {
-        state.loading = false;
-        state.loginError = action.payload;
-      }
-    )
-    .addCase(LOGOUT, (state) => {
-      state.isAuthenticated = false;
-    })
-    .addCase(REGISTER_REQUEST, (state) => {
-      state.loading = true;
-      state.registerError = null;
-    })
-    .addCase(REGISTER_SUCCESS, (state) => {
-      state.loading = false;
-    })
-    .addCase(
-      REGISTER_FAILURE,
-      (state: InitialState, action: RegisterFailureAction) => {
-        state.loading = false;
-        state.registerError = action.payload;
-      }
-    );
-});
-
-export { authReducer };
+export const authReducer: Reducer<IAuthState, IAuthAction | IResetAppAction> = (
+  state: IAuthState = initialState,
+  action: IAuthAction | IResetAppAction
+) => {
+  switch (action.type) {
+    case LOGIN_REQUEST:
+      return {
+        ...state,
+        loading: true,
+        loginError: null,
+      };
+    case LOGIN_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+      };
+    case LOGIN_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        loginError: action.payload,
+      };
+    case LOGOUT_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+    case LOGOUT_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+      };
+    case LOGOUT_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        logoutError: action.payload,
+      };
+    case REGISTER_REQUEST:
+      return {
+        ...state,
+        loading: true,
+        registerError: null,
+      };
+    case REGISTER_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+      };
+    case REGISTER_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        registerError: action.payload,
+      };
+    case RESET_APP:
+      return initialState;
+    default:
+      return state;
+  }
+};

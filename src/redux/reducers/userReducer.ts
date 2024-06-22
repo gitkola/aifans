@@ -1,7 +1,5 @@
-// src/redux/reducers/userReducer.ts
-
-import { Action, createReducer } from "@reduxjs/toolkit";
-import { HYDRATE } from "next-redux-wrapper";
+import type { IUser } from "@/types";
+import type { IUserAction } from "../actions/userActions";
 import {
   FETCH_USER_REQUEST,
   FETCH_USER_SUCCESS,
@@ -9,82 +7,73 @@ import {
   UPDATE_USER_REQUEST,
   UPDATE_USER_SUCCESS,
   UPDATE_USER_FAILURE,
+  SET_USER,
 } from "../actions/userActions";
-import { User } from "@/db/models";
+import type { IResetAppAction } from "../actions/actionTypes";
+import { RESET_APP } from "../actions/actionTypes";
+import { Reducer } from "redux";
 
-interface InitialState {
-  user: User | null;
+export interface IUserState {
+  user: IUser | null;
   loading: boolean;
   error: string | null;
 }
 
-const initialState: InitialState = {
+const initialState: IUserState = {
   user: null,
   loading: false,
   error: null,
 };
 
-interface HydrateAction extends Action {
-  payload?: InitialState;
-}
-
-interface FetchUserSuccessAction extends Action<"FETCH_USER_SUCCESS"> {
-  payload: User;
-}
-
-interface FetchUserFailureAction extends Action<"FETCH_USER_FAILURE"> {
-  payload: string;
-}
-
-interface UpdateUserSuccessAction extends Action<"UPDATE_USER_SUCCESS"> {
-  payload: User;
-}
-
-interface UpdateUserFailureAction extends Action<"UPDATE_USER_FAILURE"> {
-  payload: string;
-}
-
-const userReducer = createReducer(initialState, (builder) => {
-  builder
-    .addCase(HYDRATE, (state: InitialState, action: HydrateAction) => {
-      return { ...state, ...action.payload };
-    })
-    .addCase(FETCH_USER_REQUEST, (state) => {
-      state.loading = true;
-      state.error = null;
-    })
-    .addCase(
-      FETCH_USER_SUCCESS,
-      (state: InitialState, action: FetchUserSuccessAction) => {
-        state.user = action.payload;
-        state.loading = false;
-      }
-    )
-    .addCase(
-      FETCH_USER_FAILURE,
-      (state: InitialState, action: FetchUserFailureAction) => {
-        state.loading = false;
-        state.error = action.payload;
-      }
-    )
-    .addCase(UPDATE_USER_REQUEST, (state) => {
-      state.loading = true;
-      state.error = null;
-    })
-    .addCase(
-      UPDATE_USER_SUCCESS,
-      (state: InitialState, action: UpdateUserSuccessAction) => {
-        state.user = action.payload;
-        state.loading = false;
-      }
-    )
-    .addCase(
-      UPDATE_USER_FAILURE,
-      (state: InitialState, action: UpdateUserFailureAction) => {
-        state.loading = false;
-        state.error = action.payload;
-      }
-    );
-});
-
-export { userReducer };
+export const userReducer: Reducer<IUserState, IUserAction | IResetAppAction> = (
+  state: IUserState = initialState,
+  action: IUserAction | IResetAppAction
+) => {
+  switch (action.type) {
+    case FETCH_USER_REQUEST:
+      return {
+        ...state,
+        loading: true,
+        error: null,
+      };
+    case FETCH_USER_SUCCESS:
+      return {
+        ...state,
+        user: action.payload,
+        loading: false,
+      };
+    case FETCH_USER_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      };
+    case UPDATE_USER_REQUEST:
+      return {
+        ...state,
+        loading: true,
+        error: null,
+      };
+    case UPDATE_USER_SUCCESS:
+      return {
+        ...state,
+        user: action.payload,
+        loading: false,
+      };
+    case UPDATE_USER_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      };
+    case SET_USER:
+      return {
+        ...state,
+        user: action.payload,
+      };
+    case RESET_APP:
+      return initialState;
+    default:
+      return state;
+  }
+};

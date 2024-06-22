@@ -1,33 +1,28 @@
-// src/redux/reducers/themeReducer.ts
-
-import { Action, createReducer } from "@reduxjs/toolkit";
-import { HYDRATE } from "next-redux-wrapper";
+import type { ISetThemeAction } from "../actions/themeActions";
 import { SET_THEME } from "../actions/themeActions";
+import { Reducer } from "redux";
 
-interface InitialState {
-  theme: "light" | "dark";
+export type Theme = "light" | "dark";
+
+export interface IThemeState {
+  theme: Theme;
 }
 
-const initialState: InitialState = {
+const initialState: IThemeState = {
   theme: "light",
 };
 
-interface HydrateAction extends Action {
-  payload?: InitialState;
-}
-
-interface SetThemeAction extends Action<"SET_THEME"> {
-  payload: "light" | "dark";
-}
-
-const themeReducer = createReducer(initialState, (builder) => {
-  builder
-    .addCase(HYDRATE, (state: InitialState, action: HydrateAction) => {
-      return { ...state, ...action.payload };
-    })
-    .addCase(SET_THEME, (state: InitialState, action: SetThemeAction) => {
-      state.theme = action.payload;
-    });
-});
-
-export { themeReducer };
+export const themeReducer: Reducer<IThemeState, ISetThemeAction> = (
+  state: IThemeState = initialState,
+  action: ISetThemeAction
+) => {
+  switch (action.type) {
+    case SET_THEME:
+      return {
+        ...state,
+        theme: action.payload,
+      };
+    default:
+      return state;
+  }
+};

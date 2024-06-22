@@ -13,5 +13,5 @@ export const sequelize = new Sequelize(database, username, password, {
   host,
   port,
   dialect: "mysql",
-  // logging: (msg) => console.log(`[Sequelize] ${msg}`),
+  logging: (msg) => console.log(`[Sequelize] ${msg}`),
 });

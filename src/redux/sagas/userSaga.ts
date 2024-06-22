@@ -1,34 +1,38 @@
-// src/redux/sagas/userSaga.ts
-
 import { call, put, takeLatest } from "redux-saga/effects";
 import {
   fetchUserSuccess,
   fetchUserFailure,
   updateUserSuccess,
   updateUserFailure,
-} from "../actions/userActions";
-import {
   FETCH_USER_REQUEST,
   UPDATE_USER_REQUEST,
 } from "../actions/userActions";
 import { fetchUserProfile, updateUserProfile } from "../../api-client/userApi";
-import { User } from "@/db/models";
+import { IUser } from "@/types";
 
 function* handleFetchUser() {
   try {
-    const user: User = yield call(fetchUserProfile);
-    yield put(fetchUserSuccess(user));
-  } catch (error) {
-    yield put(fetchUserFailure((error as Error).message));
+    const data: { user: IUser } = yield call(fetchUserProfile);
+    yield put(fetchUserSuccess(data.user));
+  } catch (error: any) {
+    const message =
+      error?.response?.data?.message ||
+      error?.message ||
+      "Something went wrong";
+    yield put(fetchUserFailure(message));
   }
 }
 
 function* handleUpdateUser(action: any) {
   try {
-    const user: User = yield call(updateUserProfile, action.payload);
+    const user: IUser = yield call(updateUserProfile, action.payload);
     yield put(updateUserSuccess(user));
-  } catch (error) {
-    yield put(updateUserFailure((error as Error).message));
+  } catch (error: any) {
+    const message =
+      error?.response?.data?.message ||
+      error?.message ||
+      "Something went wrong";
+    yield put(updateUserFailure(message));
   }
 }
 

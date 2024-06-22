@@ -1,63 +1,68 @@
-// src/pages/login.tsx
-
-import { useFormik } from 'formik';
-import * as Yup from 'yup';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppState } from '../redux/store';
-import { loginRequest } from '../redux/actions/authActions';
-import { useEffect } from 'react';
-import { useRouter } from 'next/router';
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import { ICredentials, loginRequest } from "@/redux/actions/authActions";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks/reduxHooks";
+import { useRouter } from "next/router";
 
 const Login = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
+  const { user } = useAppSelector((state) => state.user);
+  const { loginError, loading } = useAppSelector((state) => state.auth);
   const router = useRouter();
-  const { isAuthenticated, loginError, loading } = useSelector((state: AppState) => state.auth);
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      router.push('/profile');
-    }
-  }, [isAuthenticated, router]);
 
   const formik = useFormik({
     initialValues: {
-      usernameOrEmail: '',
-      password: '',
+      username: "",
+      password: "",
     },
     validationSchema: Yup.object({
-      usernameOrEmail: Yup.string().required('Username or email required'),
-      password: Yup.string().required('Password required'),
+      username: Yup.string().required("Username or email required"),
+      password: Yup.string().required("Password required"),
     }),
-    onSubmit: (values) => {
+    onSubmit: (values: ICredentials) => {
       dispatch(loginRequest(values));
     },
   });
 
-  const disabled = Object.keys(formik.touched).length < 1 || !formik.isValid || loading;
+  const disabled =
+    Object.keys(formik.touched).length < 1 || !formik.isValid || loading;
+
+  if (user) {
+    router.push('/main');
+    return null;
+  }
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-2">
       <h1 className="text-3xl font-bold mb-4">Login</h1>
       <form onSubmit={formik.handleSubmit} className="w-full max-w-md p-8">
         <div className="mb-4">
-          <label htmlFor="usernameOrEmail" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-            Username or email
+          <label
+            htmlFor="username"
+            className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+          >
+            Username or email address
           </label>
           <input
-            id="usernameOrEmail"
-            name="usernameOrEmail"
+            id="username"
+            name="username"
             type="text"
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            value={formik.values.usernameOrEmail}
+            value={formik.values.username}
             className="mt-1 block w-full p-2 text-gray-700 border border-gray-300 dark:border-gray-700 rounded-md shadow-sm focus:ring focus:ring-opacity-50"
           />
-          {formik.touched.usernameOrEmail && formik.errors.usernameOrEmail ? (
-            <div className="text-red-500 text-sm">{formik.errors.usernameOrEmail}</div>
+          {formik.touched.username && formik.errors.username ? (
+            <div className="text-red-500 text-sm">
+              {formik.errors.username}
+            </div>
           ) : null}
         </div>
         <div className="mb-4">
-          <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+          <label
+            htmlFor="password"
+            className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+          >
             Password
           </label>
           <input
@@ -73,7 +78,9 @@ const Login = () => {
             <div className="text-red-500 text-sm">{formik.errors.password}</div>
           ) : null}
         </div>
-        {loginError && <div className="text-red-500 text-sm mb-4">{loginError}</div>}
+        {loginError && (
+          <div className="text-red-500 text-sm mb-4">{loginError}</div>
+        )}
         <br />
         <div className="mb-4">
           <button

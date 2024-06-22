@@ -1,3 +1,5 @@
+import { Model } from "sequelize";
+
 export type UserRole = "user" | "admin";
 export type GameName = "tetris" | "snake";
 
@@ -45,3 +47,32 @@ export type ReactionType =
   | "laugh"
   | "sad"
   | "angry";
+
+export interface IUser {
+  id: string;
+  username?: string;
+  email: string;
+  password?: string;
+  role: UserRole;
+  avatar?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+export interface UserInstance extends Model<IUser>, IUser {
+  validPassword: (password: string) => Promise<boolean>;
+}
+
+export interface ISessionData {
+  cookie: {
+    expires?: string;
+    httpOnly?: boolean;
+    originalMaxAge?: number;
+    path?: string;
+    sameSite?: string;
+    secure?: boolean;
+  };
+  passport: {
+    user: string; // this is actually user id
+  };
+}

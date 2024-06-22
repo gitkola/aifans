@@ -1,7 +1,3 @@
-// src/api-client/authApi.ts
-
-import axios from "axios";
-
 const API_URL = "/api/auth/";
 
 export const registerApi = async ({
@@ -10,34 +6,46 @@ export const registerApi = async ({
   username,
 }: {
   password: string;
-  email?: string;
+  email: string;
   username?: string;
 }) => {
-  if (!email && !username) throw new Error("Email or username required");
-  const response = await axios.post(API_URL + "register", {
-    username,
-    password,
-    email,
+  const response = await fetch(API_URL + "register", {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({
+      username,
+      password,
+      email,
+    }),
   });
-  return response.data;
+  if (!response.ok) throw new Error(response.statusText);
+  return await response.json();
 };
 
 export const loginApi = async ({
-  usernameOrEmail,
+  username,
   password,
 }: {
-  usernameOrEmail: string;
+  username: string;
   password: string;
 }) => {
-  if (!usernameOrEmail) throw new Error("Email or username required");
-  const response = await axios.post(API_URL + "login", {
-    usernameOrEmail,
-    password,
+  const response = await fetch(API_URL + "login", {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({
+      username,
+      password,
+    }),
   });
-  return response.data;
+  if (!response.ok) throw new Error(response.statusText);
+  return await response.json();
 };
 
 export const logoutApi = async () => {
-  const response = await axios.post(API_URL + "logout");
-  return response.data;
+  const response = await fetch(API_URL + "logout", {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+  });
+  if (!response.ok) throw new Error(response.statusText);
+  return await response.json();
 };
