@@ -16,8 +16,8 @@ function* handleSaveTheme(action: ISetThemeAction) {
 }
 
 function* handleGetTheme() {
-  const theme: Theme = (localStorage.getItem("theme") || "light") as Theme;
-  yield put(setTheme(theme));
+  const theme: Theme = localStorage.getItem("theme") as Theme;
+  yield put(setTheme(theme || "light"));
   const prevTheme = theme === "light" ? "dark" : "light";
   document.documentElement.classList.remove(prevTheme);
   document.documentElement.classList.add(theme);

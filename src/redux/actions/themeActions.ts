@@ -25,3 +25,5 @@ export interface IGetThemeAction {
 export const getTheme = (): IGetThemeAction => ({
   type: GET_THEME,
 });
+
+export type IThemeAction = ISetThemeAction | ISaveThemeAction | IGetThemeAction;

@@ -1,20 +1,14 @@
-import { useEffect, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { getTheme, saveTheme } from "../../redux/actions/themeActions";
+import { saveTheme } from "../../redux/actions/themeActions";
 import type { Theme } from "../../redux/reducers/themeReducer";
-import type { AppState } from "../../redux/store";
+import { useAppDispatchRef, useAppSelector } from "@/redux/hooks/reduxHooks";
 
 const ThemeSwitcher: React.FC = () => {
-  const theme = useSelector((state: AppState) => state.theme.theme);
-  const dispatchRef = useRef<any>({});
-  dispatchRef.current = useDispatch();
-  useEffect(() => {
-    dispatchRef.current(getTheme());
-  }, []);
+  const theme = useAppSelector((state) => state.theme.theme);
+  const dispatch = useAppDispatchRef();
 
   const toggleTheme = () => {
     const newTheme: Theme = theme === "light" ? "dark" : "light";
-    dispatchRef.current(saveTheme(newTheme));
+    dispatch(saveTheme(newTheme));
   };
 
   return (

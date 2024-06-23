@@ -1,4 +1,4 @@
-import type { ISetThemeAction } from "../actions/themeActions";
+import type { IThemeAction } from "../actions/themeActions";
 import { SET_THEME } from "../actions/themeActions";
 import { Reducer } from "redux";
 
@@ -12,9 +12,9 @@ const initialState: IThemeState = {
   theme: "light",
 };
 
-export const themeReducer: Reducer<IThemeState, ISetThemeAction> = (
+export const themeReducer: Reducer<IThemeState, IThemeAction> = (
   state: IThemeState = initialState,
-  action: ISetThemeAction
+  action: IThemeAction
 ) => {
   switch (action.type) {
     case SET_THEME:

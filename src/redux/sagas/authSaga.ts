@@ -18,14 +18,13 @@ import { RESET_APP } from "../actions/actionTypes";
 
 function* handleLogin(action: ILoginRequestAction): any {
   try {
-    const { username, password } = action.payload;
-    const data = yield call(loginApi, { username, password });
+    const { user } = yield call(loginApi, action.payload);
     yield put(loginSuccess());
-    yield put(setUser(data.user));
+    yield put(setUser(user));
   } catch (error: any) {
     const message =
-      error?.response?.data?.message ||
       error?.message ||
+      error?.response?.data?.message ||
       "Something went wrong";
     yield put(loginFailure(message));
   }
@@ -33,8 +32,8 @@ function* handleLogin(action: ILoginRequestAction): any {
 
 function* handleRegister(action: IRegisterRequestAction): any {
   try {
-    const { username, password, email } = action.payload;
-    yield call(registerApi, { username, password, email });
+    const { password, email } = action.payload;
+    yield call(registerApi, action.payload);
     yield put(registerSuccess());
     yield put(loginRequest({ username: email, password }));
   } catch (error: any) {
@@ -55,8 +54,8 @@ function* handleLogout(): any {
       error?.response?.data?.message ||
       error?.message ||
       "Something went wrong";
-    yield put({ type: RESET_APP });
     yield put(logoutFailure(message));
+    yield put({ type: RESET_APP });
   }
 }
 

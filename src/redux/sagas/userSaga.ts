@@ -10,14 +10,14 @@ import {
 import { fetchUserProfile, updateUserProfile } from "../../api-client/userApi";
 import { IUser } from "@/types";
 
-function* handleFetchUser() {
+export function* handleFetchUser() {
   try {
     const data: { user: IUser } = yield call(fetchUserProfile);
     yield put(fetchUserSuccess(data.user));
   } catch (error: any) {
     const message =
-      error?.response?.data?.message ||
       error?.message ||
+      error?.response?.data?.message ||
       "Something went wrong";
     yield put(fetchUserFailure(message));
   }
@@ -29,8 +29,8 @@ function* handleUpdateUser(action: any) {
     yield put(updateUserSuccess(user));
   } catch (error: any) {
     const message =
-      error?.response?.data?.message ||
       error?.message ||
+      error?.response?.data?.message ||
       "Something went wrong";
     yield put(updateUserFailure(message));
   }
