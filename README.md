@@ -1,22 +1,59 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
-
 ## Getting Started
 
-First, run the development server:
+### Clone repository:
+
+```bash
+git clone https://github.com/gitkola/aifans && cd aifans && git checkout feature/signup-signin
+```
+
+### Install dependencies:
+
+```bash
+npm install
+# or
+yarn
+```
+
+### Setup MySQL database:
+
+1. Be sure your MySQL is running
+2. Add `.env` file with your credentials:
+
+```
+DB_NAME=aifans
+DB_USERNAME=your_username
+DB_PASSWORD=your_password
+DB_HOST=localhost
+DB_PORT=3306
+```
+
+3. Run script to create database:
+
+```bash
+npm run db:create
+# or
+yarn db:create
+```
+
+4. Run migrations:
+
+```bash
+npm run migrate:up
+# or
+yarn migrate:up
+```
+
+### Run project:
+
+1. Run the development server:
 
 ```bash
 npm run dev
 # or
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+2. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 [API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
 
