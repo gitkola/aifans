@@ -9,7 +9,7 @@ export interface IThemeState {
 }
 
 const initialState: IThemeState = {
-  theme: "light",
+  theme: "dark",
 };
 
 export const themeReducer: Reducer<IThemeState, IThemeAction> = (
