@@ -6,8 +6,8 @@ import { useEffect } from "react";
 import { Inter } from "next/font/google";
 import { appInitRequest } from "@/redux/actions/appActions";
 import { useAppDispatchRef, useAppSelector } from "@/redux/hooks/reduxHooks";
-import Sidebar from "@/components/Layout/sidebar";
-import ThemeSwitcher from "@/components/Layout/ThemeSwitcher";
+import Sidebar from "@/components/Sidebar";
+import ThemeSwitcher from "@/components/ThemeSwitcher";
 
 
 const inter = Inter({ subsets: ["latin"] });

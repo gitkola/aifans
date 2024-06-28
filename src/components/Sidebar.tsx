@@ -39,7 +39,7 @@ const Sidebar = () => {
           <Link href="/" className={className}>AIFans</Link>
           {authorized && <Link href="/main" className={className}>Main</Link>}
           {authorized && <Link href="/me" className={className}>Profile</Link>}
-          <Link href="/game" className={className}>Game</Link>
+          {authorized && <Link href="/game" className={className}>Game</Link>}
           {unauthorized && <Link href="/auth/login" className={className}>Login</Link>}
           {unauthorized && <Link href="/auth/registration" className={className}>Registration</Link>}
         </div>

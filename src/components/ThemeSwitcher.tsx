@@ -1,5 +1,5 @@
-import { saveTheme } from "../../redux/actions/themeActions";
-import type { Theme } from "../../redux/reducers/themeReducer";
+import { saveTheme } from "../redux/actions/themeActions";
+import type { Theme } from "../redux/reducers/themeReducer";
 import { useAppDispatchRef, useAppSelector } from "@/redux/hooks/reduxHooks";
 
 const ThemeSwitcher: React.FC = () => {

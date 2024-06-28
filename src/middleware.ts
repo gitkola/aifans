@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 export async function middleware(req: NextRequest, res: NextResponse) {
   const aifansSessionId = req?.cookies?.get("aifansSessionId")?.value;
   const publicRoutes = ["/", "/auth/login", "/auth/register"];
-  const protectedRoutes = ["/main", "/me"];
+  const protectedRoutes = ["/main", "/me", "/game"];
   const path = req.nextUrl.pathname;
   if (publicRoutes.includes(path)) {
     return NextResponse.next();
