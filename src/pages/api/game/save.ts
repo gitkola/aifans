@@ -5,10 +5,6 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  if (req.method !== "POST") {
-    return res.status(405).json({ message: "Method not allowed" });
-  }
-
   const { userId, gameState } = req.body;
 
   if (!userId || !gameState) {
@@ -18,7 +14,6 @@ export default async function handler(
   try {
     const [game, created] = await Game.findOrCreate({
       where: { userId, name: "tetris" },
-      // defaults: { state: gameState },
     });
 
     if (!created) {
