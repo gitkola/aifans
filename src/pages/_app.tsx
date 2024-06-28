@@ -2,12 +2,12 @@ import { Provider } from "react-redux";
 import { AppProps } from "next/app";
 import { store } from "@/redux/store";
 import "@/styles/globals.css";
-import Header from "@/components/Layout/Header";
-import Footer from "@/components/Layout/Footer";
 import { useEffect } from "react";
 import { Inter } from "next/font/google";
 import { appInitRequest } from "@/redux/actions/appActions";
 import { useAppDispatchRef, useAppSelector } from "@/redux/hooks/reduxHooks";
+import Sidebar from "@/components/Sidebar";
+import ThemeSwitcher from "@/components/ThemeSwitcher";
 
 
 const inter = Inter({ subsets: ["latin"] });
@@ -17,11 +17,11 @@ const App = ({ Component, pageProps }: AppProps) => {
     <Provider store={store}>
       <div className="window flex flex-col">
         <main className={`flex-grow ${inter.className}`}>
-          <Header />
+          <Sidebar />
           <WithAppInitialization>
             <Component {...pageProps} />
           </WithAppInitialization>
-          <Footer />
+          <ThemeSwitcher />
         </main>
       </div>
     </Provider>
@@ -43,7 +43,6 @@ function WithAppInitialization(props: { children: JSX.Element }) {
     };
   }, [loading, initialized, dispatch]);
 
-  console.log('WithAppInitialization', { loading, error, initialized })
   return (
     <>
       {

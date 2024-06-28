@@ -126,7 +126,7 @@ const Register = () => {
         <br />
         <div className="mb-4">
           <button
-            disabled={disabled}
+            // disabled={disabled}
             type="submit"
             className="w-full bg-blue-500 text-white py-2 px-4 rounded-md shadow-sm hover:bg-blue-600 focus:ring focus:ring-blue-300 disabled:opacity-50"
           >
