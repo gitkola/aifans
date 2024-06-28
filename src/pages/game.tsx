@@ -1,5 +1,8 @@
 import React, { useState, useEffect, useCallback, useRef, useLayoutEffect } from 'react';
 import Head from 'next/head';
+import { useAppSelector } from '@/redux/hooks/reduxHooks';
+import { AppState } from '@/redux/store';
+import axios from 'axios';
 
 const ROWS = 20;
 const COLS = 10;
@@ -22,6 +25,7 @@ type Shape = number[][];
 type Position = { x: number; y: number };
 
 const Game: React.FC = () => {
+  const { user } = useAppSelector((state: AppState) => state.user);
   const isTouchEnabled = 'ontouchstart' in window && 'ongesturechange' in window;
   const [grid, setGrid] = useState<number[][]>(Array(ROWS).fill(Array(COLS).fill(0)));
   const [currentShape, setCurrentShape] = useState<Shape>(getRandomShape());
@@ -220,9 +224,7 @@ const Game: React.FC = () => {
         }
       });
     });
-    const wSize = `w-[${cellSize}px]`;
-    const hSize = `h-[${cellSize}px]`;
-    console.log(cellSize);
+
     return renderedGrid.map((row, y) => (
       <div key={y} className="flex">
         {row.map((cell, x) => (
@@ -249,6 +251,56 @@ const Game: React.FC = () => {
     ));
   };
 
+  const saveGameState = useCallback(async () => {
+    if (!user || !user.id) return;
+
+    const gameState = {
+      grid,
+      currentShape,
+      nextShape,
+      position,
+      score,
+      speed,
+    };
+
+    try {
+      await axios.post('/api/game/save', {
+        userId: user.id,
+        gameState,
+      });
+      console.log('Game state saved successfully');
+    } catch (error) {
+      console.error('Error saving game state:', error);
+    }
+  }, [user, grid, currentShape, nextShape, position, score, speed]);
+
+  const loadGameState = useCallback(async () => {
+    if (!user || !user.id) return;
+
+    try {
+      const response = await axios.get(`/api/game/load?userId=${user.id}`);
+      const { gameState } = response.data;
+
+      if (gameState) {
+        setGrid(gameState.grid);
+        setCurrentShape(gameState.currentShape);
+        setNextShape(gameState.nextShape);
+        setPosition(gameState.position);
+        setScore(gameState.score);
+        setSpeed(gameState.speed);
+        setIsGameOver(false);
+        setIsPaused(false);
+        console.log('Game state loaded successfully');
+      }
+    } catch (error) {
+      console.error('Error loading game state:', error);
+    }
+  }, [user]);
+
+  useEffect(() => {
+    loadGameState();
+  }, [loadGameState]);
+
   return (
     <div id="game" className="flex flex-col items-center justify-start min-h-scree">
       <Head>
@@ -273,10 +325,22 @@ const Game: React.FC = () => {
         </div>
         <div className={`flex`}>
           <button
-            className="text-4xl"
+            className="text-4xl mr-2"
             onClick={pauseGame}
           >
             {isPaused ? '▶️' : '⏸️'}
+          </button>
+          <button
+            className="text-4xl"
+            onClick={saveGameState}
+          >
+            💾
+          </button>
+          <button
+            className="m-4 px-2 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+            onClick={loadGameState}
+          >
+            Load Saved Game
           </button>
         </div>
       </div>

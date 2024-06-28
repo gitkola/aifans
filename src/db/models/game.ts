@@ -39,7 +39,7 @@ Game.init(
       primaryKey: true,
     },
     name: {
-      type: DataTypes.ENUM("tetris", "shake"),
+      type: DataTypes.ENUM("tetris", "snake"),
       allowNull: false,
       defaultValue: "tetris",
     },
